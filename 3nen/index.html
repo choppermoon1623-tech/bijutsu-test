@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3年美術 テスト勉強</title>
+<style>
+:root{
+  --bg:#f6f3ec; --card:#fff; --ink:#1f2633; --sub:#5a6272; --line:#ddd6c7;
+  --guernica:#4a4f5c; --ud:#178a5e; --mix:#6a4fb0;
+  --ok:#1e8a4c; --ng:#c0392b; --hl:#fff2b8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","BIZ UDGothic","Hiragino Sans","Yu Gothic",sans-serif;line-height:1.6;-webkit-text-size-adjust:100%}
+button{font:inherit;cursor:pointer}
+header{background:#1f2633;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+header h1{font-size:18px;margin:0;flex:1}
+header button{background:#ffffff22;color:#fff;border:1px solid #ffffff55;border-radius:8px;padding:4px 12px}
+main{max-width:760px;margin:0 auto;padding:16px}
+.hidden{display:none!important}
+h2{font-size:20px;margin:6px 0 12px}
+.lead{color:var(--sub);font-size:14px;margin:0 0 14px}
+/* home */
+.unit{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:12px;border-left:8px solid var(--c);box-shadow:0 1px 3px #0001}
+.unit .t{font-weight:bold;font-size:18px}
+.unit .s{color:var(--sub);font-size:13px}
+.unit .bar{height:6px;background:#eee;border-radius:3px;margin:8px 0 10px;overflow:hidden}
+.unit .bar i{display:block;height:100%;background:var(--c)}
+.unit .stat{font-size:12px;color:var(--sub)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:2px solid var(--c,#555);background:#fff;color:var(--c,#555);border-radius:10px;padding:8px 14px;font-weight:bold;min-width:84px}
+.btn.fill{background:var(--c,#555);color:#fff}
+.btn:disabled{opacity:.4;cursor:default}
+.opts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;margin:4px 0 14px;color:var(--sub)}
+.opts select{font:inherit;padding:4px 8px;border-radius:8px;border:1px solid var(--line)}
+/* quiz */
+.qhead{display:flex;justify-content:space-between;font-size:13px;color:var(--sub)}
+.prog{height:8px;background:#e6e0d3;border-radius:4px;overflow:hidden;margin:4px 0 14px}
+.prog i{display:block;height:100%;background:var(--c);transition:width .3s}
+.qcard{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 1px 3px #0001}
+.tag{display:inline-block;font-size:12px;background:var(--c);color:#fff;border-radius:20px;padding:1px 10px;margin-bottom:6px}
+.qtext{font-size:18px;font-weight:bold;margin:0 0 12px}
+.fig{text-align:center;margin:4px 0 12px}
+.fig svg{max-width:100%;height:auto}
+.fig img{max-width:100%;max-height:240px;border-radius:8px;box-shadow:0 1px 4px #0003}
+.sum img.art{display:block;max-width:100%;max-height:260px;margin:6px auto;border-radius:8px}
+.sum .cap{text-align:center;font-size:12px;color:var(--sub);margin:-2px 0 8px}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px;display:flex;gap:10px;align-items:flex-start}
+.choice .n{flex:none;width:24px;height:24px;border-radius:50%;background:#eee;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.choice:hover:not(:disabled){border-color:var(--c)}
+.choice.ok{border-color:var(--ok);background:#e8f6ee}
+.choice.ng{border-color:var(--ng);background:#fbeaea}
+.choice:disabled{cursor:default;color:inherit}
+.fb{margin-top:12px;border-radius:10px;padding:10px 12px;font-size:15px}
+.fb.ok{background:#e8f6ee;border:1px solid #b7dfc7}
+.fb.ng{background:#fbeaea;border:1px solid #efc2bd}
+.fb b{font-size:17px}
+.next{margin-top:12px;width:100%;padding:12px;font-size:17px}
+.play{background:var(--c);color:#fff;border:none;border-radius:30px;padding:8px 18px;font-weight:bold;margin-bottom:12px}
+/* order */
+.picked{min-height:46px;border:2px dashed var(--line);border-radius:10px;padding:6px;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
+.picked:empty::before{content:"下のボタンを順番にタップ";color:#aaa;font-size:14px;padding-left:4px}
+.chip{border:2px solid var(--c);background:#fff;color:var(--ink);border-radius:20px;padding:5px 12px;font-size:15px}
+.chip.in{background:var(--c);color:#fff}
+.chip.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.chip.ng{background:var(--ng);border-color:var(--ng);color:#fff}
+.chip:disabled{cursor:default}
+.pool{display:flex;flex-wrap:wrap;gap:6px}
+/* result */
+.score{font-size:46px;font-weight:bold;text-align:center;color:var(--c);margin:6px 0 0}
+.msg{text-align:center;margin:0 0 14px}
+.miss{background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:5px solid var(--ng);font-size:14px}
+.miss .a{color:var(--ok);font-weight:bold}
+/* cards */
+.flash{background:var(--card);border-radius:16px;min-height:230px;padding:22px 18px;box-shadow:0 2px 6px #0002;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;user-select:none;border-top:8px solid var(--c)}
+.flash .front{font-size:19px;font-weight:bold}
+.flash .back{font-size:22px;font-weight:bold;color:var(--c)}
+.flash .ex{font-size:14px;color:var(--sub);margin-top:10px}
+.flash .hint{font-size:12px;color:#999;margin-top:14px}
+.cardnav{display:flex;gap:8px;margin-top:12px}
+.cardnav .btn{flex:1;padding:12px}
+/* summary */
+.sum{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px #0001}
+.sum h3{margin:0 0 8px;font-size:17px;color:var(--c);border-bottom:2px solid var(--c);padding-bottom:3px}
+.sum p,.sum li{font-size:15px}
+.sum ul{padding-left:20px;margin:6px 0}
+.k{background:linear-gradient(transparent 55%,var(--hl) 55%);font-weight:bold}
+table.t{border-collapse:collapse;width:100%;font-size:14px;margin:6px 0}
+table.t th,table.t td{border:1px solid var(--line);padding:5px 6px;text-align:center;vertical-align:middle}
+table.t th{background:#f3efe5}
+.flow{display:flex;flex-direction:column;gap:4px;margin:6px 0}
+.flow div{background:#f3efe5;border-radius:8px;padding:6px 10px;font-size:14px;position:relative}
+.flow div b{color:var(--c)}
+.mini{font-size:13px;color:var(--sub)}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.keys .kk{border:1px solid var(--line);border-radius:10px;padding:4px;text-align:center;font-size:13px}
+.chordbtns{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chordbtns button{border:1px solid var(--c);background:#fff;color:var(--c);border-radius:8px;padding:4px 10px;font-size:14px}
+.tip{background:#fffbea;border:1px solid #efe1a4;border-radius:10px;padding:8px 12px;font-size:14px;margin-top:8px}
+footer{text-align:center;font-size:12px;color:#999;padding:20px}
+@media (max-width:480px){.qtext{font-size:17px}.choice{font-size:15px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎨 3年 美術 テスト勉強</h1>
+  <button id="homeBtn" class="hidden" onclick="go('home')">ホーム</button>
+</header>
+<main id="app"></main>
+<footer>成績はこの端末のブラウザだけに保存されます</footer>
+
+<script>
+'use strict';
+/* ===================== 作品画像（パブリックドメイン・縮小） ===================== */
+const IMG = {
+
+};
+
+/* ===================== 単元 ===================== */
+const UNITS = {
+  guernica:{name:'鑑賞 ピカソ「ゲルニカ」',sub:'作品と対話しよう　作者・キュビスム・作品の背景',c:'var(--guernica)',icon:'🕊'},
+  ud:{name:'ユニバーサルデザイン',sub:'UDとは・歴史・身近なUD・7原則・生み出す手順',c:'var(--ud)',icon:'🤝'}
+};
+
+/* ===================== 問題 ===================== */
+// 1行1問。a=正解、d=まちがいの選択肢3つ、e=解説、type:'order'=並べかえ（items が正しい順）
+// 「ゲルニカ」は著作権の保護期間中のため、作品画像は入れていない
+const UD7=[['だれでも公平に使える','自動ドア'],['使い方を選べる','左右兼用のはさみ'],['使い方がかんたん','センサー式の蛇口'],['必要な情報が伝わる','絵・音・手ざわりで知らせる案内'],['まちがいの危険を減らす','指をはさみにくいドア'],['少ない力で楽に使える','レバー式の蛇口'],['使いやすい大きさ・広さ','広い多目的トイレ']];
+const Q = [
+/* ---------- ゲルニカ ---------- */
+{id:'g01',u:'guernica',tag:'作品と作者',q:'「ゲルニカ」の作者は？',a:'パブロ・ピカソ',d:['サルバドール・ダリ','フィンセント・ファン・ゴッホ','アンリ・マティス'],e:'スペイン生まれの画家（1881〜1973）。'},
+{id:'g02',u:'guernica',tag:'作品と作者',q:'「ゲルニカ」が制作された年は？',a:'1937年',d:['1901年','1945年','1981年'],e:'油彩・キャンバス。1981年はスペインにもどった年。'},
+{id:'g03',u:'guernica',tag:'作品と作者',q:'「ゲルニカ」の大きさは？',a:'たて約3.5m × よこ約7.8m',d:['たて約77cm × よこ約53cm','たて約1.5m × よこ約1.7m','たて約10m × よこ約30m'],e:'高さは教室の天井より高く、横は黒板2枚分以上。'},
+{id:'g04',u:'guernica',tag:'作品と作者',q:'「ゲルニカ」が今ある美術館は？',a:'ソフィア王妃芸術センター（スペイン・マドリード）',d:['ルーヴル美術館（パリ）','ニューヨーク近代美術館','ピカソ美術館（バルセロナ）'],e:'長くアメリカ（ニューヨーク）の美術館に預けられていたが、1981年スペインへ。'},
+{id:'g05',u:'guernica',tag:'作品と作者',q:'「ゲルニカ」に使われている色は？',a:'白・黒・灰色だけ',d:['赤と黒だけ','青色が中心','明るいバラ色が中心'],e:'馬の胴体には新聞の文字のような細かい線も。'},
+{id:'g06',u:'guernica',tag:'ピカソ',q:'ピカソが生まれた国と町は？',a:'スペインのマラガ',d:['フランスのパリ','イタリアのミラノ','スペインのゲルニカ'],e:'1881年、スペイン南部のマラガ。'},
+{id:'g07',u:'guernica',tag:'ピカソ',q:'ピカソについて、正しいものは？',a:'父は美術の先生で、幼いころから絵がとても上手だった',d:['絵を始めたのは50歳をすぎてから','生涯スペインから出なかった','作品は数十点しか残っていない'],e:'20代からは主にフランスで活動。残した作品は数万点ともいわれる。'},
+{id:'g08',u:'guernica',tag:'ピカソ',q:'ピカソは何歳まで描き続けた？',a:'91歳（1973年になくなるまで）',d:['37歳','67歳','100歳'],e:'1881〜1973年。'},
+{id:'g09',u:'guernica',tag:'作風の変化',q:'親友の死をきっかけに、青色を中心にさびしさや貧しさを描いた時期は？',a:'青の時代',d:['バラ色の時代','キュビスムの時代','白黒の時代'],e:'1901年〜。'},
+{id:'g10',u:'guernica',tag:'作風の変化',q:'恋人と出会い、明るい色が増えた時期は？',a:'バラ色の時代',d:['青の時代','キュビスムの時代','新古典の時代'],e:'1904年〜。'},
+{id:'g11',u:'guernica',tag:'作風の変化',type:'order',q:'ピカソの作風の変化を、古い順に並べよう',items:['青の時代','バラ色の時代','キュビスム','「泣く女」「ゲルニカ」'],e:'1901〜 → 1904〜 → 1907〜 → 1937年'},
+{id:'g12',u:'guernica',tag:'作風の変化',q:'「ゲルニカ」と同じ1937年にえがかれた、悲しみを強い色と形で表した作品は？',a:'泣く女',d:['パイプを持つ少年','鏡の前の少女','アビニヨンの娘たち'],e:'パイプを持つ少年＝1905年（バラ色の時代）、鏡の前の少女＝1932年（キュビスム）。'},
+{id:'g13',u:'guernica',tag:'キュビスム',q:'いろいろな方向から見た形を、1つの画面に組み合わせる表し方は？',a:'キュビスム（立体派）',d:['スフマート','たらし込み','印象派'],e:'写真のような絵は1つの視点から見た形を描く。'},
+{id:'g14',u:'guernica',tag:'キュビスム',q:'「ゲルニカ」の牛に見られるキュビスムの表し方は？',a:'横向きの顔なのに、目が2つとも見える',d:['目をとじている','顔だけ金色にぬられている','遠近法で小さくえがかれている'],e:'横顔と正面の顔が混ざった人も見つけてみよう。'},
+{id:'g15',u:'guernica',tag:'作品の背景',q:'「ゲルニカ」が描かれたころ、スペインで起きていたことは？',a:'内戦（政府とフランコ将軍の反乱軍の戦い）',d:['オリンピック','王の結婚式','大地震'],e:'1936年から、選挙で選ばれた政府と反乱軍が国を二つに分けて戦っていた。'},
+{id:'g16',u:'guernica',tag:'作品の背景',q:'ゲルニカとは何？',a:'スペイン北部（バスク地方）の小さな町',d:['ピカソの恋人の名前','スペインの首都','フランスの美術館'],e:'1937年4月26日、市が立つ月曜日に爆撃された。'},
+{id:'g17',u:'guernica',tag:'作品の背景',q:'1937年4月26日、ゲルニカの町に起きたことは？',a:'午後、空から爆撃された',d:['大きな地震が起きた','洪水で町が流された','大きなお祭りが開かれた'],e:'フランコ側を助けるドイツ空軍（イタリア空軍も加わる）が数時間にわたって爆弾を落とした。'},
+{id:'g18',u:'guernica',tag:'作品の背景',q:'ゲルニカを爆撃したのは？',a:'フランコ側を助けるドイツの空軍（イタリア空軍も加わる）',d:['スペイン政府の空軍','フランスの空軍','アメリカの空軍'],e:'人々が暮らす町への空からの攻撃として、世界に衝撃をあたえた。'},
+{id:'g19',u:'guernica',tag:'作品の背景',q:'爆撃のとき、ピカソはどこにいた？',a:'パリ（新聞で事件を知った）',d:['ゲルニカの町','マドリード','ニューヨーク'],e:'現場を見て写した絵ではない。'},
+{id:'g20',u:'guernica',tag:'作品の背景',q:'ピカソがスペイン政府からたのまれていたのは？',a:'パリ万国博覧会のスペイン館にかざる大きな壁画',d:['オリンピックのポスター','教会の天井画','新聞のさし絵'],e:'ゲルニカのニュースを知って、描くテーマを変えた。'},
+{id:'g21',u:'guernica',tag:'作品の背景',q:'「ゲルニカ」は、描き始めてからどれくらいで完成した？',a:'約1か月',d:['約3日','約3年','約10年'],e:'5月はじめに描き始め、6月はじめに完成。'},
+{id:'g22',u:'guernica',tag:'作品の背景',q:'なぜ白・黒・灰色だけで描いたのか。授業で紹介された見方は？',a:'新聞の白黒写真のように、起きたことを伝えるため',d:['絵の具が足りなかったから','早くかわかすため','万博の決まりだったから'],e:'色を消して悲しみや恐ろしさを強めるため、という見方も。答えは一つではない。'},
+{id:'g23',u:'guernica',tag:'作品のその後',q:'内戦のあと、「ゲルニカ」はどこに預けられた？',a:'アメリカ（ニューヨーク）の美術館',d:['ドイツの美術館','ゲルニカの町役場','ピカソの家'],e:'内戦はフランコ側が勝ち、独裁が続いた。'},
+{id:'g24',u:'guernica',tag:'作品のその後',q:'ピカソが「ゲルニカ」について望んだことは？',a:'スペインに自由と民主主義がもどるまで、この絵を帰さない',d:['自分が死んだら燃やしてほしい','すぐにゲルニカの町にかざってほしい','だれにも見せないでほしい'],e:'ピカソもフランコも亡くなったあとの1981年、ようやくスペインへ。'},
+{id:'g25',u:'guernica',tag:'作品のその後',q:'「ゲルニカ」がスペインにもどったのは何年？',a:'1981年',d:['1937年','1945年','1973年'],e:'1973年はピカソがなくなった年。'},
+{id:'g26',u:'guernica',tag:'部分の見方',q:'折れた剣のそばに描かれた小さな花は、何を表していると見る人がいる？',a:'希望',d:['怒り','笑い','富'],e:'意味は一つに決められない。ピカソ自身の説明も時によってちがう。'},
+{id:'g27',u:'guernica',tag:'部分の見方',q:'ランプを差し出す女の人は、どんな意味だと見られることがある？',a:'真実を照らし出そうとする光',d:['戦争を始める合図','夜が明けた喜び','お祭りの明かり'],e:'子を抱く母＝家族を失う悲しみ、馬＝傷つき苦しむ人々・町、電球の目＝すべてを見ている目。'},
+{id:'g28',u:'guernica',tag:'鑑賞のしかた',q:'1時間目に、作品と対話するために行ったことは？',a:'気になった部分から聞こえてくる声や音を想像した',d:['作品を模写した','作品の値段を調べた','作品の大きさを測った'],e:'声や音を想像すると、作品の中に入りこんで深く考えられる。'},
+{id:'g29',u:'guernica',tag:'鑑賞のしかた',q:'鑑賞の学習の約束として正しいものは？',a:'間違った意見はない。作品のどこからそう考えたかを伝える',d:['正しい答えは1つなので先生の説明を覚える','友だちと意見がちがったら言わない','作者の説明だけが正しい'],e:'友だちの見方を笑わない。'},
+{id:'g30',u:'guernica',tag:'鑑賞文',q:'ピカソが訴えたかったことを書く文として、いちばんよいものは？',a:'子を抱く母が上を向いて叫ぶ形から、家族を失う悲しみが伝わり、戦争のおそろしさと平和への願いを訴えたかったのだと思う。',d:['有名な画家の絵なので、すごいことを訴えていると思う。','白黒でこわかった。','よくわからないけど、いい絵だと思う。'],e:'作品のどの部分（形・向き・明るさ）からそう考えたかを書こう。'},
+
+/* ---------- ユニバーサルデザイン ---------- */
+{id:'u01',u:'ud',tag:'UDとは',q:'ユニバーサルデザイン（UD）とは？',a:'はじめから、年齢・性別・国籍・障害のあるなしなどにかかわらず、できるだけ多くの人が使いやすいように考えたデザイン',d:['障害のある人だけが使う専用のデザイン','あとから生活のじゃまを取りのぞくこと','見た目を美しくすることだけを考えたデザイン'],e:'見た目だけじゃない。使いやすさもデザイン。'},
+{id:'u02',u:'ud',tag:'UDとは',q:'Universal（ユニバーサル）の意味は？',a:'すべての・みんなの',d:['計画・設計','新しい・未来の','特別な・専用の'],e:'Design（デザイン）＝計画・設計すること。'},
+{id:'u03',u:'ud',tag:'UDとは',q:'Design（デザイン）の意味は？',a:'計画・設計すること',d:['飾ること','すべての・みんなの','かたちを写すこと'],e:'Universal＝すべての・みんなの。合わせると「みんなのための設計」。'},
+{id:'u04',u:'ud',tag:'バリアフリー',q:'バリアフリーとは？',a:'生活のじゃま（バリア）を取りのぞく・改善すること',d:['はじめから多くの人が使いやすく考えること','絵で場所や意味を伝えること','左右どちらの手でも使えること'],e:'例：階段にスロープを付ける。どちらも大切で、重なる工夫も多い。'},
+{id:'u05',u:'ud',tag:'バリアフリー',q:'「階段にスロープを付ける」は、主にどちらの考え方の例？',a:'バリアフリー',d:['ユニバーサルデザイン','ノーマライゼーション','ピクトグラム'],e:'UD＝はじめからできるだけ多くの人が使いやすく。'},
+{id:'u06',u:'ud',tag:'UDの歴史',q:'UDを提唱したアメリカの建築家・デザイナーは？',a:'ロナルド・メイス',d:['レオナルド・ダ・ヴィンチ','パブロ・ピカソ','ウィトルウィウス'],e:'子どものころの病気で、自分も車いすで生活していた。1985年に提唱。'},
+{id:'u07',u:'ud',tag:'UDの歴史',q:'メイスの考え方は？',a:'特別あつかいではなく、はじめからみんなが使えるものを作ろう',d:['障害のある人専用の設備をふやそう','使いにくくても美しいものを作ろう','困ったらあとで直せばよい'],e:'「専用」の設備は目立ったり、遠回りだったりした。'},
+{id:'u08',u:'ud',tag:'UDの歴史',q:'1959年にデンマークで生まれた、「だれもがふつうに暮らせる社会」をめざす考え方は？',a:'ノーマライゼーション',d:['バリアフリー','ユニバーサルデザイン','ピクトグラム'],e:'「特別な人のため」から「みんなのため」へ。'},
+{id:'u09',u:'ud',tag:'UDの歴史',q:'1964年の東京オリンピックで大活躍した、競技や施設を絵で案内するものは？',a:'ピクトグラム',d:['点字ブロック','ノンステップバス','UDフォント'],e:'言葉がちがっても伝わる。'},
+{id:'u10',u:'ud',tag:'UDの歴史',type:'order',q:'UDの歴史。できごとを古い順に並べよう',items:['ノーマライゼーション（デンマーク）','東京五輪でピクトグラム','メイスがUDを提唱','シャンプーのきざみ（花王）','牛乳パックの切り欠き'],e:'1959 → 1964 → 1985 → 1991 → 2001'},
+{id:'u11',u:'ud',tag:'UDの歴史',q:'1991年、シャンプーのボトルにきざみ（ギザギザ）を導入した会社は？',a:'花王',d:['トヨタ','任天堂','ヤマハ'],e:'目をつぶっていても、さわってシャンプーとわかる。'},
+{id:'u12',u:'ud',tag:'UDの歴史',q:'UDの7原則がまとめられたのは？',a:'1997年、アメリカのメイスたち',d:['1959年、デンマーク','1964年、東京','2001年、日本'],e:'1985年にメイスがUDを提唱 → 1997年に考え方を7原則に整理。'},
+{id:'u13',u:'ud',tag:'身近なUD',q:'牛乳パックの上にある半円の「切り欠き」の位置は？',a:'開け口の反対側',d:['開け口と同じ側','底','側面のまん中'],e:'「牛乳」の目印。見なくてもさわってわかる（切り欠きのない商品もある）。'},
+{id:'u14',u:'ud',tag:'身近なUD',q:'ノンステップバスの工夫は？',a:'乗り口のステップをなくし、床を低くした（スロープ板も出せる）',d:['座席をなくして立って乗る','乗り口を高くして雨が入らないようにした','運賃をなくした'],e:'車いす・お年寄り・ベビーカー・大きな荷物の人などが乗り降りしやすい。'},
+{id:'u15',u:'ud',tag:'身近なUD',q:'レバー式の蛇口のよさは？',a:'にぎる力が弱くても、手の甲やひじで動かせる',d:['さわらずに手を出すだけで水が出る','水の色が変わる','音で水の量を知らせる'],e:'センサー式＝手を出すだけ。さわらないから清潔。'},
+{id:'u16',u:'ud',tag:'身近なUD',q:'形がまぎれにくく、だれにでも読みやすい書体を何という？',a:'UDフォント',d:['ピクトグラム','点字','明朝体'],e:'授業のスライドの文字もUDフォント。'},
+{id:'u17',u:'ud',tag:'UDの7原則',q:'UDの7原則のうち「少ない力で楽に使える」の例は？',a:'レバー式の蛇口',d:['自動ドア','左右兼用のはさみ','広い多目的トイレ'],e:'にぎる力が弱くても、手の甲やひじで動かせる。'},
+...UD7.map(([p,ex],i)=>({id:'u7'+i,u:'ud',tag:'UDの7原則',q:`「${ex}」は、UDの7原則のどれの例？`,a:`${i+1} ${p}`,d:shuffle(UD7.map((x,j)=>`${j+1} ${x[0]}`).filter((_,j)=>j!==i)).slice(0,3),e:`原則${i+1}「${p}」の例＝${ex}`})).filter(q=>q.id!=='u75'),
+{id:'u18',u:'ud',tag:'UDの7原則',q:'シャンプーのギザギザが特にあてはまる原則は？',a:'必要な情報が伝わる',d:['使いやすい大きさ・広さ','少ない力で楽に使える','だれでも公平に使える'],e:'1つのUDが、いくつもの原則にあてはまることも多い。'},
+{id:'u19',u:'ud',tag:'生み出す手順',type:'order',q:'UDを生み出す4ステップを順に並べよう',items:['見つける','なりきる','考える','たしかめる'],e:'たしかめたら「考える」にもどってよりよく。'},
+{id:'u20',u:'ud',tag:'生み出す手順',q:'UDのアイデアを考えるとき、まずすることは？',a:'使う人を1人にしぼって、その人になりきって想像する',d:['できるだけ多くの人を同時に考える','材料の値段を調べる','完成したポスターから考える'],e:'まず1人から考え、ほかの人にも使いやすいか確かめる。'},
+{id:'u21',u:'ud',tag:'生み出す手順',q:'アイデアスケッチでは、ちがう形を何案以上考える？',a:'3案以上',d:['1案だけ','2案','10案以上'],e:'選んだ1案を正面・横・使う場面で。工夫に矢印＋ひと言。上手な絵より伝わる絵。'},
+{id:'u22',u:'ud',tag:'6つの視点',q:'工夫を考える「6つの視点」の組み合わせは？',a:'形・大きさ・色・手ざわり・わかりやすさ・安全',d:['値段・重さ・におい・音・速さ・量','線・面・光・影・遠近・構図','春・夏・秋・冬・朝・夜'],e:'使う人が「持つ・見る・さわる・使う」場面を思いうかべると覚えやすい。'},
+{id:'u23',u:'ud',tag:'6つの視点',q:'「色」の視点で気をつけることは？',a:'はっきり見分けられるようにし、色だけにたよらない',d:['できるだけたくさんの色を使う','色はすべて同じにする','目立たない色にする'],e:'色の見え方は人によってちがう。形や手ざわりと組み合わせる。'},
+{id:'u24',u:'ud',tag:'模型と撮影',q:'粘土の模型で、工夫の部分（凸凹・くぼみ）はどうつくる？',a:'少し大げさにする',d:['目立たないように小さく','つくらずに色で表す','最後に紙でつける'],e:'細い部分には芯（つまようじ・針金）。友だちに持ってもらって修正。'},
+{id:'u25',u:'ud',tag:'模型と撮影',q:'模型を撮影するときの背景のくふうは？',a:'白い画用紙を曲げて、つなぎ目を消す',d:['教室の黒板の前で撮る','色々な物を後ろに並べる','新聞紙をしく'],e:'光は窓のやわらかい光。フラッシュは使わない。'},
+{id:'u26',u:'ud',tag:'模型と撮影',q:'模型の撮影で、光について正しいものは？',a:'窓のやわらかい光を使い、フラッシュは使わない',d:['フラッシュを必ず使う','暗い部屋で撮る','真上の蛍光灯だけで撮る'],e:'手を添えて「使っているところ」も撮ろう。'},
+{id:'u27',u:'ud',tag:'ポスター広告',q:'ポスター広告で、いちばん大きく見せるものは？',a:'模型の写真（主役）',d:['作者名','工夫の説明文','キャッチコピーの飾り'],e:'キャッチコピーは短く／だれの何を助けるかを一文で／工夫は3つ。'},
+{id:'u28',u:'ud',tag:'ポスター広告',q:'ポスターにのせる工夫の数は？',a:'3つ（アイコン＋短い言葉）',d:['1つ','7つすべて','できるだけ多く'],e:'ポスターもUDで！大きな文字・はっきりした色の差。'},
+{id:'u29',u:'ud',tag:'単元の流れ',type:'order',q:'この単元で作るものを、作る順に並べよう',items:['粘土で模型','写真をとる','ポスター広告（Canva）'],e:'だれかの「困った」を解決するUDを考え、形にして、広告で伝える。'},
+{id:'u30',u:'ud',tag:'まとめ',q:'単元のまとめで、デザインは何の「形」だといった？',a:'だれかへの「思いやり」',d:['お金','流行','自分の好み'],e:'ヒントは身の回りの「困った」の中にある。'}
+];
+
+/* ===================== まとめ ===================== */
+// 表の中の文章は左よせで読みやすく
+const TL=' style="text-align:left"';
+const TN=' style="white-space:nowrap"';
+const SUM = {
+guernica:`
+<div class="sum"><h3>⓪ まず、話の流れをつかもう</h3>
+<div class="flow">
+<div><b>1</b>　スペインで<b>内戦</b>が起きていた</div>
+<div><b>2</b>　1937年、<b>ゲルニカの町</b>が空から爆撃された</div>
+<div><b>3</b>　パリにいた<b>ピカソ</b>が新聞で知り、大きな壁画のテーマを変えた</div>
+<div><b>4</b>　約1か月で、白・黒・灰色だけの巨大な絵「ゲルニカ」が完成</div>
+<div><b>5</b>　今も、戦争の悲しみと平和への願いを伝え続けている</div></div>
+<p class="mini">この流れが頭に入ると、①〜⑦の語句がつながって覚えやすい。</p></div>
+
+<div class="sum"><h3>① 作品と作者</h3>
+<table class="t">
+<tr><th${TN}>作品名</th><td${TL}>「<span class="k">ゲルニカ</span>」</td></tr>
+<tr><th${TN}>作者</th><td${TL}><span class="k">パブロ・ピカソ</span>（スペイン生まれ）</td></tr>
+<tr><th${TN}>制作</th><td${TL}><span class="k">1937年</span>　油彩・キャンバス</td></tr>
+<tr><th${TN}>大きさ</th><td${TL}>たて約<span class="k">3.5m</span> × よこ約<span class="k">7.8m</span><br><span class="mini">高さは教室の天井より高く、横は黒板2枚分以上</span></td></tr>
+<tr><th${TN}>色</th><td${TL}><span class="k">白・黒・灰色だけ</span></td></tr>
+<tr><th${TN}>今ある場所</th><td${TL}><span class="k">ソフィア王妃芸術センター</span>（スペイン・<b>マドリード</b>）</td></tr></table>
+<p class="mini">※作品は著作権の保護期間中のため、このアプリには画像をのせていません。教科書やワークシートの図を横に置いて確認しよう。</p></div>
+
+<div class="sum"><h3>② ピカソ（1881〜1973）</h3>
+<ul><li><span class="k">スペイン南部のマラガ</span>生まれ。父は美術の先生で、幼いころから絵が上手</li>
+<li>20代からは主に<b>フランス</b>で活動</li>
+<li><b>91歳</b>でなくなるまで描き続け、作品は数万点ともいわれる</li></ul>
+<p><b>何度も作風を変えた</b>（古い順）</p>
+<div class="flow">
+<div><b>1901〜 青の時代</b>　親友の死 → <b>青色</b>でさびしさ・貧しさ</div>
+<div><b>1904〜 バラ色の時代</b>　恋人と出会う → <b>明るいバラ色</b></div>
+<div><b>1907〜 キュビスム</b>　いろいろな方向から見た形を1つの画面に</div>
+<div><b>1937 「泣く女」「ゲルニカ」</b>　同じ年の作品</div></div>
+<table class="t"><tr><th>写真のような絵</th><th><span class="k">キュビスム（立体派）</span></th></tr>
+<tr><td><b>1つの視点</b>から見た形を描く</td><td><span class="k">いろいろな方向から見た形</span>を、1つの画面に組み合わせる</td></tr></table>
+<p>「ゲルニカ」での例：牛は<b>横向きの顔なのに、目が2つとも見える</b></p></div>
+
+<div class="sum"><h3>③ 作品の背景（なぜ描いたのか）</h3>
+<table class="t">
+<tr><th${TN}>いつ</th><td${TL}>1936年から<span class="k">スペイン内戦</span>（選挙で選ばれた政府 vs <b>フランコ将軍</b>の反乱軍）</td></tr>
+<tr><th${TN}>ゲルニカとは</th><td${TL}><span class="k">スペイン北部（バスク地方）の小さな町</span>の名前</td></tr>
+<tr><th${TN}>何が起きた</th><td${TL}><span class="k">1937年4月26日</span>（月曜・市が立つ日）の午後、<span class="k">空から爆撃</span>された</td></tr>
+<tr><th${TN}>だれが</th><td${TL}>フランコ側を助ける<b>ドイツ空軍</b>（イタリア空軍も加わる）</td></tr>
+<tr><th${TN}>ピカソは</th><td${TL}><span class="k">パリ</span>にいた。<span class="k">パリ万国博覧会のスペイン館</span>にかざる壁画をたのまれていた</td></tr>
+<tr><th${TN}>どうした</th><td${TL}><b>新聞</b>で事件を知り、描くテーマを変えた（現場を見て写した絵ではない）</td></tr>
+<tr><th${TN}>完成まで</th><td${TL}>約<span class="k">1か月</span>（5月はじめ〜6月はじめ）</td></tr></table>
+<p><b>なぜ白・黒・灰色だけ？</b>（見方の例。答えは一つではない）</p>
+<ul><li>事件を知った<b>新聞の白黒写真</b>のように、起きたことを伝えるため</li>
+<li>色を消して、<b>悲しみや恐ろしさ</b>を強めるため</li></ul></div>
+
+<div class="sum"><h3>④ 部分と見方（答えは一つではない）</h3>
+<table class="t"><tr><th>部分</th><th>絵のどこ</th><th>見方の例</th></tr>
+<tr><td${TN}>牛</td><td>左上</td><td${TL}>スペインの闘牛。暴力、たえる強さとも</td></tr>
+<tr><td${TN}>子を抱く母</td><td>左（牛の下）</td><td${TL}>家族を失う、戦争のいちばんの悲しみ</td></tr>
+<tr><td${TN}>馬</td><td>中央</td><td${TL}>傷つき苦しむ人々、町そのもの</td></tr>
+<tr><td${TN}>電球の目</td><td>上の中央</td><td${TL}>すべてを見ている目。爆弾の光とも</td></tr>
+<tr><td${TN}>ランプの女の人</td><td>中央の右上</td><td${TL}><b>真実</b>を照らし出そうとする光</td></tr>
+<tr><td${TN}>折れた剣と花</td><td>下の中央</td><td${TL}>小さな花に<span class="k">希望</span>を見る人も</td></tr></table>
+<p class="mini">ピカソ自身の説明も時によってちがい、意味は一つに決められない。</p></div>
+
+<div class="sum"><h3>⑤ 作品のその後</h3>
+<div class="flow">
+<div><b>内戦のあと</b>　フランコ側が勝ち、独裁が続く → 作品は<span class="k">アメリカ（ニューヨーク）</span>の美術館に預けられた</div>
+<div><b>ピカソの望み</b>　「<span class="k">スペインに自由と民主主義がもどるまで帰さない</span>」</div>
+<div><b>1981年</b>　ピカソもフランコもなくなったあと、ようやく<b>スペインへ</b></div></div></div>
+
+<div class="sum"><h3>⑥ まちがえやすい年号</h3>
+<table class="t"><tr><th>年</th><th>できごと</th></tr>
+<tr><td${TN}>1881</td><td${TL}>ピカソが生まれる</td></tr>
+<tr><td${TN}>1936</td><td${TL}>スペイン内戦が始まる</td></tr>
+<tr><td${TN}><span class="k">1937</span></td><td${TL}>ゲルニカ爆撃（4月26日）→「ゲルニカ」完成。「泣く女」も同じ年</td></tr>
+<tr><td${TN}>1973</td><td${TL}>ピカソがなくなる（91歳）</td></tr>
+<tr><td${TN}><span class="k">1981</span></td><td${TL}>「ゲルニカ」がスペインへもどる</td></tr></table></div>
+
+<div class="sum"><h3>⑦ 鑑賞のしかた・書き方</h3>
+<ul><li>約束：<b>間違った意見はない</b>。作品の<span class="k">どこから</span>そう考えたかを伝える</li>
+<li>1時間目：<span class="k">声や音を想像</span>する → 作品の中に入りこんで見られる</li>
+<li>2時間目：時代や作者を知る → 作品にこめられた<b>思い</b>に近づける</li></ul>
+<div class="tip"><b>書き方の型</b><br>（部分）の（形・向き・明るさ）から（感じたこと）が伝わり、ピカソは（訴えたいこと）を訴えたかったのだと思う。<br>
+<b>例</b>：子を抱く母が上を向いて叫ぶ形から、家族を失う悲しみが伝わり、戦争のおそろしさと平和への願いを訴えたかったのだと思う。</div></div>`,
+
+ud:`
+<div class="sum"><h3>⓪ まず、話の流れをつかもう</h3>
+<div class="flow">
+<div><b>1</b>　昔は「障害のある人<b>専用</b>」の設備 → 目立つ・遠回りになる</div>
+<div><b>2</b>　メイス「<b>はじめから</b>みんなが使えるものを作ろう」＝UD</div>
+<div><b>3</b>　考えるものさしが<b>7原則</b>。身の回りにもUDがたくさん</div>
+<div><b>4</b>　自分でも「困った」を見つけて、模型とポスターでUDを提案</div></div></div>
+
+<div class="sum"><h3>① UDとは</h3>
+<p><span class="k">ユニバーサルデザイン（UD）</span>＝<span class="k">はじめから</span>、年齢・性別・国籍・障害のあるなしなどにかかわらず、<span class="k">できるだけ多くの人が使いやすいように考えたデザイン</span></p>
+<p>Universal＝<span class="k">すべての・みんなの</span>／Design＝<span class="k">計画・設計すること</span><br><span class="mini">見た目だけじゃない。使いやすさもデザイン。</span></p>
+<table class="t"><tr><th>バリアフリー</th><th>ユニバーサルデザイン</th></tr>
+<tr><td>生活のじゃま（バリア）を<br><span class="k">取りのぞく・改善する</span></td><td><span class="k">はじめから</span><br>できるだけ多くの人が使いやすく</td></tr>
+<tr><td>例：階段にスロープを付ける</td><td>例：シャンプーのギザギザ、自動ドア</td></tr></table>
+<p class="mini">どちらも大切。重なる工夫も多い。</p></div>
+
+<div class="sum"><h3>② UDの歴史　「特別な人のため」から「みんなのため」へ</h3>
+<div class="flow">
+<div><b>1959 デンマーク</b>　<span class="k">ノーマライゼーション</span>（だれもがふつうに暮らせる社会）</div>
+<div><b>1964 日本</b>　東京オリンピックで<span class="k">ピクトグラム</span>（競技や施設を絵で案内）</div>
+<div><b>1974 国連</b>　専門家会議で<span class="k">バリアフリー</span></div>
+<div><b>1985 アメリカ</b>　<span class="k">ロナルド・メイス</span>がUDを提唱</div>
+<div><b>1991 日本</b>　<span class="k">シャンプーのきざみ</span>（花王）</div>
+<div><b>1997 アメリカ</b>　メイスたちが<span class="k">UDの7原則</span>に整理</div>
+<div><b>2001 日本</b>　<span class="k">牛乳パックの切り欠き</span></div></div>
+<p><b>ロナルド・メイス</b>：アメリカの建築家・デザイナー。子どものころの病気で、自分も<b>車いす</b>で生活。<br>
+考え方＝「特別あつかいではなく、<span class="k">はじめからみんなが使えるものを作ろう</span>」</p></div>
+
+<div class="sum"><h3>③ 身近なUD（どんな工夫？ だれが助かる？）</h3>
+<table class="t"><tr><th>もの</th><th>工夫</th><th>よさ・助かる人</th></tr>
+<tr><td${TN}>シャンプーの<br>ギザギザ</td><td${TL}>ボトルにきざみ</td><td${TL}>目をつぶっていても<b>さわってわかる</b></td></tr>
+<tr><td${TN}>牛乳パックの<br>切り欠き</td><td${TL}>上に半円の切り欠き。<span class="k">開け口の反対側</span></td><td${TL}>見なくても<b>さわって牛乳とわかる</b></td></tr>
+<tr><td${TN}>ノンステップ<br>バス</td><td${TL}>乗り口の<b>ステップをなくし</b>床を低く。スロープ板も</td><td${TL}>車いす・お年寄り・ベビーカー・大きな荷物の人</td></tr>
+<tr><td${TN}><span class="k">ピクトグラム</span></td><td${TL}><b>絵</b>で場所や意味を伝える</td><td${TL}><b>言葉がちがっても伝わる</b></td></tr>
+<tr><td${TN}>レバー式の<br>蛇口</td><td${TL}>にぎらなくても動かせるレバー</td><td${TL}>にぎる力が弱くても、<b>手の甲やひじ</b>で動かせる</td></tr>
+<tr><td${TN}>センサー式の<br>蛇口</td><td${TL}><b>手を出すだけ</b>で水が出る</td><td${TL}>さわらないから<b>清潔</b></td></tr>
+<tr><td${TN}><span class="k">UDフォント</span></td><td${TL}>形がまぎれにくい書体</td><td${TL}>だれにでも読みやすい</td></tr></table>
+<p class="mini">ほかにも：大きなボタン・左右兼用のはさみ・太くてにぎりやすいペン・さわってわかる凸凹のカード</p></div>
+
+<div class="sum"><h3>④ UDの7原則（考えるときのものさし）</h3>
+<table class="t"><tr><th>原則</th><th>例</th></tr>
+${UD7.map(([p,e],i)=>`<tr><td${TL}>${i+1}　<span class="k">${p}</span></td><td${TL}>${e}</td></tr>`).join('')}</table>
+<p><b>あてはめてみると</b></p>
+<ul><li>シャンプーのギザギザ → <b>4</b> 必要な情報が伝わる</li>
+<li>ノンステップバス → <b>1</b> だれでも公平に使える</li>
+<li>左右どちらの手でも使えるはさみ → <b>2</b> 使い方を選べる</li>
+<li>手を出すと水が出る蛇口 → <b>3</b> 使い方がかんたん</li>
+<li>レバー式の蛇口 → <b>6</b> 少ない力で楽に使える</li></ul>
+<p class="mini">1つのUDが、いくつもの原則にあてはまることも多い。</p></div>
+
+<div class="sum"><h3>⑤ UDを生み出す 4ステップ</h3>
+<table class="t"><tr><th>ステップ</th><th>すること</th></tr>
+<tr><td${TN}>1 <span class="k">見つける</span></td><td${TL}>身の回りの「困った」を探す</td></tr>
+<tr><td${TN}>2 <span class="k">なりきる</span></td><td${TL}>使う人を<b>1人にしぼり</b>、その人の気持ちで場面を想像（だれが・どんな場面で・何に困る）</td></tr>
+<tr><td${TN}>3 <span class="k">考える</span></td><td${TL}>ちがう形を<span class="k">3案以上</span>スケッチ</td></tr>
+<tr><td${TN}>4 <span class="k">たしかめる</span></td><td${TL}>模型を友だちに試してもらい、直す</td></tr></table>
+<p class="mini">たしかめたら「3 考える」にもどって、よりよくする。まず1人から考え、ほかの人にも使いやすいか確かめる。</p></div>
+
+<div class="sum"><h3>⑥ 工夫を考える 6つの視点</h3>
+<table class="t"><tr><th>視点</th><th>たとえば</th></tr>
+<tr><td${TN}><span class="k">形</span></td><td${TL}>にぎりやすい・すべりにくい・角が丸い</td></tr>
+<tr><td${TN}><span class="k">大きさ</span></td><td${TL}>手の大きさ・届く高さに合う</td></tr>
+<tr><td${TN}><span class="k">色</span></td><td${TL}>はっきり見分けられる。<b>色だけにたよらない</b></td></tr>
+<tr><td${TN}><span class="k">手ざわり</span></td><td${TL}>凸凹・ざらざらで、さわってわかる</td></tr>
+<tr><td${TN}><span class="k">わかりやすさ</span></td><td${TL}>見ただけで使い方がわかる</td></tr>
+<tr><td${TN}><span class="k">安全</span></td><td${TL}>まちがえても、けがをしにくい</td></tr></table></div>
+
+<div class="sum"><h3>⑦ 形にして、伝える（模型 → 写真 → ポスター）</h3>
+<table class="t"><tr><th>作るもの</th><th>ポイント</th></tr>
+<tr><td${TN}>アイデア<br>スケッチ</td><td${TL}>選んだ1案を<b>正面・横・使う場面</b>で。工夫に矢印＋ひと言。上手な絵より<b>伝わる絵</b></td></tr>
+<tr><td${TN}>粘土の模型</td><td${TL}>工夫の部分（凸凹・くぼみ）は<span class="k">少し大げさに</span>。細い所には芯（つまようじ・針金）</td></tr>
+<tr><td${TN}>写真</td><td${TL}>背景は<span class="k">白い画用紙を曲げて</span>つなぎ目を消す。光は<span class="k">窓のやわらかい光</span>、フラッシュは使わない。手を添えて使っている場面も</td></tr>
+<tr><td${TN}>ポスター広告</td><td${TL}><span class="k">模型の写真が主役</span>（いちばん大きく）。キャッチコピーは短く。だれの何を助けるかを一文で。工夫は<span class="k">3つ</span></td></tr></table>
+<div class="tip">デザインは、だれかへの「<b>思いやり</b>」の形。ヒントは身の回りの「困った」の中にある。</div></div>`
+};
+
+
+/* ===================== 保存 ===================== */
+const KEY='bijutsu3-test-v1';
+let ST={};
+try{ST=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){ST={};}
+ST.q=ST.q||{}; ST.n=ST.n||10;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}}
+function record(id,ok){const r=ST.q[id]||{ok:0,ng:0,last:null};ok?r.ok++:r.ng++;r.last=ok;ST.q[id]=r;save();}
+const isWeak=id=>ST.q[id]&&ST.q[id].last===false;
+
+/* ===================== 道具 ===================== */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pickOne(a){return a[Math.floor(Math.random()*a.length)];}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function unitColor(u){return u==='mix'||u==='weak'?'var(--mix)':UNITS[u].c;}
+function build(q){ // 生成問題を実体化
+  const base=Object.assign({},q);
+  if(q.gen){Object.assign(base,q.gen.call(base));}
+  return base;
+}
+
+/* ===================== 画面 ===================== */
+let S=null; // クイズ状態
+function go(view,arg){
+  window.scrollTo(0,0);
+  $('#homeBtn').classList.toggle('hidden',view==='home');
+  if(view==='home') return home();
+  if(view==='sum') return summary(arg);
+  if(view==='cards') return cards(arg);
+  if(view==='quiz') return startQuiz(arg);
+}
+
+function home(){
+  const weak=Q.filter(q=>isWeak(q.id)).length;
+  let h=`<h2>どこを勉強する？</h2><p class="lead">「まとめ」で確認 →「カード」で覚える →「クイズ」で力だめし。まちがえた問題は自動で記録されます。</p>
+  <div class="opts">クイズの問題数：<select id="nsel" onchange="ST.n=+this.value;save()">${[10,20,0].map(n=>`<option value="${n}" ${ST.n===n?'selected':''}>${n||'全部'}</option>`).join('')}</select></div>`;
+  for(const u in UNITS){
+    const U=UNITS[u],qs=Q.filter(q=>q.u===u),done=qs.filter(q=>ST.q[q.id]),good=qs.filter(q=>ST.q[q.id]&&ST.q[q.id].last);
+    h+=`<div class="unit" style="--c:${U.c}"><div class="t">${U.icon} ${U.name}</div><div class="s">${U.sub}</div>
+    <div class="bar"><i style="width:${qs.length?good.length/qs.length*100:0}%"></i></div>
+    <div class="stat">全${qs.length}問中　正解ずみ ${good.length}問　（とりくんだ ${done.length}問）</div>
+    <div class="btns" style="margin-top:8px"><button class="btn" onclick="go('sum','${u}')">📘 まとめ</button><button class="btn" onclick="go('cards','${u}')">🃏 カード</button><button class="btn fill" onclick="go('quiz','${u}')">✏️ クイズ</button></div></div>`;
+  }
+  h+=`<div class="unit" style="--c:var(--mix)"><div class="t">🎯 テスト本番モード</div><div class="s">${Object.keys(UNITS).length}つの範囲をまぜて出題</div>
+  <div class="btns" style="margin-top:8px"><button class="btn fill" onclick="go('quiz','mix')">全範囲ミックス</button>
+  <button class="btn" onclick="go('quiz','weak')" ${weak?'':'disabled'}>まちがえた問題だけ（${weak}問）</button>
+  <button class="btn" onclick="if(confirm('記録をすべて消しますか？')){ST.q={};save();home();}">記録を消す</button></div></div>`;
+  $('#app').innerHTML=h;
+}
+
+function summary(u){
+  const U=UNITS[u];
+  $('#app').innerHTML=`<div style="--c:${U.c}"><h2>${U.icon} ${U.name}　まとめ</h2><p class="lead">黄色いマーカー＝テストに出やすい語句</p>${SUM[u]}
+  <div class="btns"><button class="btn" onclick="go('cards','${u}')">🃏 カードで覚える</button><button class="btn fill" onclick="go('quiz','${u}')">✏️ クイズに挑戦</button></div></div>`;
+}
+
+/* ---------- カード ---------- */
+let C=null;
+function cards(u){
+  const list=Q.filter(q=>q.u===u&&q.type!=='order'&&!q.listen);
+  C={u,list:shuffle(list),i:0,flip:false};
+  drawCard();
+}
+function drawCard(){
+  const U=UNITS[C.u];
+  if(C.i>=C.list.length){
+    $('#app').innerHTML=`<div style="--c:${U.c}"><h2>🃏 カード おわり！</h2><p class="lead">「まだ」にした問題は「まちがえた問題だけ」で復習できます。</p>
+    <div class="btns"><button class="btn" onclick="cards('${C.u}')">もう一周</button><button class="btn fill" onclick="go('quiz','${C.u}')">クイズに挑戦</button></div></div>`;return;
+  }
+  const q=build(C.list[C.i]);
+  $('#app').innerHTML=`<div style="--c:${U.c}">
+  <div class="qhead"><span>${U.icon} ${U.name}　カード</span><span>${C.i+1} / ${C.list.length}</span></div>
+  <div class="prog"><i style="width:${C.i/C.list.length*100}%"></i></div>
+  <div class="flash" onclick="C.flip=!C.flip;drawCardFace()">
+    <div class="tag">${esc(q.tag)}</div>
+    ${q.img?`<div class="fig"><img src="${IMG[q.img]}" alt=""></div>`:''}
+    <div class="front">${esc(q.q)}</div>
+    <div id="cb"></div>
+    <div class="hint" id="ch">タップで答えを見る（スペースキーでもOK）</div>
+  </div>
+  ${q.audio?`<div style="text-align:center;margin-top:10px"><button class="play" onclick="playQ()">▶ 音を聴く</button></div>`:''}
+  <div class="cardnav"><button class="btn" style="--c:var(--ng)" onclick="cardNext(false)">✕ まだ</button><button class="btn fill" style="--c:var(--ok)" onclick="cardNext(true)">○ 覚えた</button></div></div>`;
+  C.q=q; C.flip=false;
+}
+function drawCardFace(){
+  $('#cb').innerHTML=C.flip?`<div class="back">${esc(C.q.a)}</div><div class="ex">${esc(C.q.e||'')}</div>`:'';
+  $('#ch').textContent=C.flip?'○か✕を選んで次へ':'タップで答えを見る（スペースキーでもOK）';
+}
+function cardNext(ok){record(C.list[C.i].id,ok);C.i++;drawCard();}
+
+/* ---------- クイズ ---------- */
+function startQuiz(u,list){
+  let pool=list|| (u==='mix'?Q.slice(): u==='weak'?Q.filter(q=>isWeak(q.id)):Q.filter(q=>q.u===u));
+  pool=shuffle(pool);
+  if(!list && u!=='weak' && ST.n) pool=pool.slice(0,ST.n);
+  S={u,list:pool,i:0,ok:0,miss:[]};
+  drawQ();
+}
+function drawQ(){
+  if(S.i>=S.list.length) return result();
+  const raw=S.list[S.i],q=build(raw),uc=unitColor(raw.u);
+  S.cur=q; S.answered=false;
+  const title=S.u==='mix'?'全範囲ミックス':S.u==='weak'?'まちがえた問題':UNITS[S.u].name;
+  let body='';
+  if(q.type==='order'){
+    S.picked=[]; S.pool=shuffle(q.items);
+    body=`<div class="picked" id="picked"></div><div class="pool" id="pool"></div>
+    <div class="btns" style="margin-top:10px"><button class="btn" onclick="S.picked=[];drawOrder()">やり直す</button><button class="btn fill" id="chk" onclick="checkOrder()" disabled>答え合わせ</button></div>`;
+  }else{
+    S.opts=shuffle([q.a,...q.d]);
+    body=`<div class="choices">${S.opts.map((o,i)=>`<button class="choice" data-i="${i}" onclick="answer(${i})"><span class="n">${i+1}</span><span>${esc(o)}</span></button>`).join('')}</div>`;
+  }
+  $('#app').innerHTML=`<div style="--c:${uc}">
+  <div class="qhead"><span>${esc(title)}</span><span>${S.i+1} / ${S.list.length}　正解 ${S.ok}</span></div>
+  <div class="prog"><i style="width:${S.i/S.list.length*100}%"></i></div>
+  <div class="qcard" style="--c:${UNITS[raw.u].c}">
+    <div class="tag">${UNITS[raw.u].icon} ${esc(q.tag)}</div>
+    <p class="qtext">${esc(q.q)}</p>
+    ${q.img?`<div class="fig"><img src="${IMG[q.img]}" alt=""></div>`:''}
+    ${q.audio?`<button class="play" onclick="playQ()">▶ 音を聴く</button>`:''}
+    ${body}
+    <div id="fb"></div>
+  </div></div>`;
+  if(q.type==='order') drawOrder();
+  if(q.listen) setTimeout(()=>{try{playQ();}catch(e){}},300);
+}
+function playQ(){
+  const q=S&&S.cur&&$('.qcard')?S.cur:C&&C.q;
+  if(!q||!q.audio) return;
+  if(q.audio.chord) playChord(CH[q.audio.chord]);
+  if(q.audio.meter) playMeter(q.audio.meter);
+}
+function answer(i){
+  if(S.answered) return; S.answered=true;
+  const q=S.cur,ok=S.opts[i]===q.a;
+  document.querySelectorAll('.choice').forEach((b,j)=>{b.disabled=true;if(S.opts[j]===q.a)b.classList.add('ok');else if(j===i)b.classList.add('ng');});
+  finish(ok,q.a);
+}
+function drawOrder(){
+  const rest=S.pool.filter(x=>!S.picked.includes(x));
+  $('#picked').innerHTML=S.picked.map((x,i)=>`<button class="chip in" onclick="S.picked.splice(${i},1);drawOrder()">${i+1}. ${esc(x)}</button>`).join('');
+  $('#pool').innerHTML=rest.map(x=>`<button class="chip" onclick='S.picked.push(${JSON.stringify(x)});drawOrder()'>${esc(x)}</button>`).join('');
+  $('#chk').disabled=S.picked.length!==S.pool.length;
+}
+function checkOrder(){
+  if(S.answered) return; S.answered=true;
+  const q=S.cur,ok=S.picked.every((x,i)=>x===q.items[i]);
+  $('#picked').innerHTML=S.picked.map((x,i)=>`<button class="chip ${x===q.items[i]?'ok':'ng'}" disabled>${i+1}. ${esc(x)}</button>`).join('');
+  document.querySelectorAll('.btns .btn').forEach(b=>b.disabled=true);
+  finish(ok,q.items.join(' → '));
+}
+function finish(ok,ans){
+  const q=S.cur;
+  record(q.id,ok);
+  if(ok) S.ok++; else S.miss.push({q:q.q,a:ans,e:q.e,raw:S.list[S.i]});
+  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'ng'}"><b>${ok?'⭕ 正解！':'❌ ざんねん'}</b>${ok?'':`<br>正解：<b>${esc(ans)}</b>`}${q.e?`<br>${esc(q.e)}`:''}</div>
+  <button class="btn fill next" id="nextBtn" onclick="S.i++;drawQ()">${S.i+1<S.list.length?'次の問題へ ▶':'結果を見る ▶'}</button>`;
+  $('#nextBtn').focus({preventScroll:true});
+  $('#fb').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function result(){
+  const n=S.list.length,p=Math.round(S.ok/n*100),uc=unitColor(S.u);
+  const msg=p===100?'パーフェクト！ テストもこの調子 🎉':p>=80?'よくできました！ あと少しで満点 👍':p>=50?'いい感じ。まちがえた所を「まとめ」で確認しよう':'まずは「まとめ」と「カード」で覚えてから再挑戦しよう';
+  $('#app').innerHTML=`<div style="--c:${uc}"><h2>結果</h2>
+  <p class="score">${S.ok} / ${n}</p><p class="msg">${p}点　${msg}</p>
+  <div class="btns" style="margin-bottom:14px">${S.miss.length?`<button class="btn fill" onclick="startQuiz('${S.u}',S.miss.map(m=>m.raw))">まちがえた${S.miss.length}問をもう一度</button>`:''}
+  <button class="btn" onclick="go('quiz','${S.u}')">別の問題で</button><button class="btn" onclick="go('home')">ホーム</button></div>
+  ${S.miss.map(m=>`<div class="miss">${esc(m.q)}<br><span class="a">→ ${esc(m.a)}</span>${m.e?`<br><span class="mini">${esc(m.e)}</span>`:''}</div>`).join('')}</div>`;
+}
+
+/* キーボード：1〜4で選ぶ、Enterで次へ、スペースでカードをめくる */
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='SELECT') return;
+  if($('.choices')&&!S.answered&&/^[1-4]$/.test(e.key)){const b=document.querySelector(`.choice[data-i="${+e.key-1}"]`);if(b){b.click();e.preventDefault();}}
+  else if(e.key==='Enter'&&$('#nextBtn')){e.preventDefault();$('#nextBtn').click();}
+  else if(e.key===' '&&$('.flash')){e.preventDefault();C.flip=!C.flip;drawCardFace();}
+});
+
+go('home');
+</script>
+</body>
+</html>
